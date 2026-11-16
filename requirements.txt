@@ -1,6 +1,7 @@
-requests==2.31.0
+requests>=2.32.3,<3
 dnspython==2.4.2
 colorama==0.4.6
 python-whois==0.9.5
 reportlab==4.1.0
 urllib3==2.1.0
+chardet>=5,<6
