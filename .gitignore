@@ -1,17 +1,12 @@
-.venv/
-__pycache__/
-*.py[cod]
-*.log
-reports/
-logs/
-.env
-
 # Python
 __pycache__/
 *.py[cod]
 .pytest_cache/
 .venv/
 
+# Environment variables
+.env
+
 # Generated output
-logs/*
-reports/*
+logs/
+reports/
