@@ -2,11 +2,9 @@ import logging
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 
 import requests
-import urllib3
 
 from config import XSS_PAYLOADS, HEADERS, REQUEST_TIMEOUT
 
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 def check_xss(url: str, logger: logging.Logger) -> dict:
@@ -63,8 +61,7 @@ def _try_xss_request(url: str, param: str, payload: str,
             url,
             headers=HEADERS,
             timeout=REQUEST_TIMEOUT,
-            verify=False,
-            allow_redirects=True,
+            allow_redirects=False,
         )
         response_text = resp.text
 

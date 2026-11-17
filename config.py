@@ -26,7 +26,6 @@ COMMON_SUBDOMAINS = [
 SQL_PAYLOADS = [
     "'", '"', "' OR '1'='1", "' OR '1'='1' --",
     "' OR 1=1 --", "\" OR \"1\"=\"1", "' OR 'x'='x",
-    "1; DROP TABLE users--", "' UNION SELECT NULL--",
     "' AND 1=0 UNION SELECT NULL,NULL--"
 ]
 

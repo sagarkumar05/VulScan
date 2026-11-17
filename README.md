@@ -1,148 +1,230 @@
-# 🔒 VulnScanner — Web Vulnerability Scanner
-### B.Tech Final Year Project | Cybersecurity / Network Security By Majid Ansari
+# VulScan — Python Web Vulnerability Scanner
 
----
+A Python-based web and network security assessment tool for educational use and authorized security testing.
 
-## 📋 Project Overview
+**Developer:** Sagar Kumar  
+**Project type:** Cybersecurity portfolio project  
+**Language:** Python  
+**Platform:** Kali Linux / Linux / Windows
 
-VulnScanner is a Python-based **automated web vulnerability scanner** that performs comprehensive security analysis on a target website or IP address. It covers:
+## Overview
 
-| Module | What it does |
-|--------|-------------|
-| 🌐 URL & IP Analysis | DNS resolution, WHOIS lookup, HTTP server info |
-| 🔌 Port Scanner | Multi-threaded TCP port scan (22 ports default) |
-| 🗺️ Subdomain Enumerator | DNS brute-force for subdomains |
-| 🔐 SSL/TLS Checker | Certificate expiry, issuer, weak protocols |
-| 💉 SQL Injection | Payload-based GET parameter testing |
-| ⚡ XSS Checker | Reflected XSS payload injection |
-| ⚠️ Risk Analyzer | Weighted scoring + recommendations |
-| 📄 Report Generator | PDF + JSON reports |
+VulScan is an extended fork of [VulnerabilityScanner by Majid Ansari](https://github.com/majidansari2/VulnerabilityScanner).
 
----
+It combines basic web vulnerability checks, network scanning, SSL/TLS inspection, and automated reporting in a command-line application.
 
-## 🚀 Quick Start (Windows VS Code)
+### Features
 
-### Step 1: Install Python
-- Download Python 3.11 from https://www.python.org/downloads/
-- ✅ Check **"Add Python to PATH"** during installation
+| Module | Functionality |
+|---|---|
+| URL and IP Analysis | DNS resolution, IP information, WHOIS lookup, HTTP server information |
+| Port Scanner | Multi-threaded TCP port scanning |
+| Subdomain Enumerator | DNS-based subdomain discovery |
+| SSL/TLS Checker | Certificate and SSL/TLS analysis |
+| SQL Injection Checker | Basic payload-based SQL injection checks |
+| XSS Checker | Basic reflected XSS payload checks |
+| Risk Analyzer | Risk scoring and security recommendations |
+| Report Generator | PDF and JSON assessment reports |
+| Scope Validator | Validates the initial target against explicitly configured domains or IP addresses |
 
-### Step 2: Open project in VS Code
-```
-File → Open Folder → select the VulnScanner folder
-```
+### Additional modifications
 
-### Step 3: Open Terminal in VS Code
-```
-Terminal → New Terminal   (or Ctrl + `)
-```
+- Added explicit target scope validation.
+- Added command-line authorization options.
+- Added tests for scope validation.
+- Disabled automatic HTTP redirect following in the HTTP scanning modules.
+- Restored default TLS certificate verification.
+- Removed a destructive SQL injection payload from the default payload list.
 
-### Step 4: Install dependencies
+## Installation
+
+### 1. Clone the repository
+
 ```bash
-pip install -r requirements.txt
+git clone https://github.com/sagarkumar05/VulScan.git
+cd VulScan
 ```
 
-### Step 5: Run the scanner
+### 2. Create a virtual environment
+
 ```bash
-python main.py
+python3 -m venv .venv
 ```
-Or with a specific target:
+
+### 3. Activate it
+
+Linux / Kali Linux:
+
 ```bash
-python main.py --target http://testphp.vulnweb.com
+source .venv/bin/activate
 ```
 
----
+Windows:
 
-## 💻 VS Code Recommended Extensions
-- **Python** (Microsoft) — IntelliSense + debugging
-- **Pylance** — type checking
-- **indent-rainbow** — indentation visualization
-
----
-
-## 🎯 Safe Test Targets (Legal!)
-These are intentionally vulnerable sites for testing:
-
-| URL | Description |
-|-----|-------------|
-| `http://testphp.vulnweb.com` | Acunetix test PHP site (SQL + XSS vulnerable) |
-| `http://zero.webappsecurity.com` | WebApp Security test site |
-| `http://scanme.nmap.org` | Nmap's official scan-me server |
-
-> ⚠️ **NEVER scan sites you don't own or have permission to test!**
-
----
-
-## 🗂️ Project Structure
-```
-VulnScanner/
-├── main.py                  ← Entry point — run this!
-├── config.py                ← All settings (payloads, ports, timeouts)
-├── requirements.txt         ← Python packages
-├── modules/
-│   ├── url_ip.py            ← URL & IP resolution
-│   ├── port_scanner.py      ← TCP port scanner
-│   ├── subdomain_scanner.py ← Subdomain enumeration
-│   ├── ssl_checker.py       ← SSL/TLS analysis
-│   ├── sql_injection_checker.py ← SQLi testing
-│   ├── xss_checker.py       ← XSS testing
-│   └── risk_analyzer.py     ← Risk scoring engine
-├── utils/
-│   ├── logger.py            ← Logging (file + colored console)
-│   └── report_generator.py  ← PDF + JSON report generation
-├── logs/                    ← Auto-created scan logs
-└── reports/                 ← Auto-created PDF + JSON reports
+```powershell
+.venv\Scripts\activate
 ```
 
----
+### 4. Install dependencies
 
-## ⚙️ Configuration
-Edit **`config.py`** to customize:
-- `DEFAULT_PORTS` — ports to scan
-- `SQL_PAYLOADS` — SQL injection payloads
-- `XSS_PAYLOADS` — XSS payloads
-- `COMMON_SUBDOMAINS` — subdomain wordlist
-- `REQUEST_TIMEOUT` — HTTP timeout
-- `MAX_THREADS` — parallel scan threads
+```bash
+python -m pip install -r requirements.txt
+```
 
----
+### 5. Run the application
 
-## 📊 CLI Options
 ```bash
 python main.py --help
-
-Options:
-  --target URL        Target URL or IP
-  --skip-ports        Skip port scanning
-  --skip-subdomains   Skip subdomain enumeration
-  --skip-ssl          Skip SSL check
-  --skip-sql          Skip SQL injection test
-  --skip-xss          Skip XSS test
 ```
 
+## Usage
+
+VulScan requires an explicitly configured authorized target.
+
+### Scan an authorized IP
+
+```bash
+python main.py --target http://127.0.0.1 --allow-ip 127.0.0.1 --skip-subdomains
+```
+
+### Scan an authorized domain
+
+```bash
+python main.py --target https://example.com --allow-domain example.com --skip-subdomains
+```
+
+Only replace the example domain with a system you own or have explicit permission to test.
+
+### Skip individual modules
+
+```bash
+python main.py \
+  --target http://127.0.0.1 \
+  --allow-ip 127.0.0.1 \
+  --skip-subdomains \
+  --skip-ports \
+  --skip-ssl
+```
+
+Available options:
+
+| Argument | Description |
+|---|---|
+| `--target`, `-t` | Target URL or IP |
+| `--allow-domain` | Explicitly authorized domain; repeatable |
+| `--allow-ip` | Explicitly authorized IP; repeatable |
+| `--allow-subdomains` | Permit subdomain enumeration |
+| `--skip-ports` | Skip TCP port scanning |
+| `--skip-subdomains` | Skip subdomain enumeration |
+| `--skip-ssl` | Skip SSL/TLS analysis |
+| `--skip-sql` | Skip SQL injection checks |
+| `--skip-xss` | Skip XSS checks |
+
+Use `python main.py --help` for the complete command reference.
+
+**Important:** Subdomain enumeration is disabled by default unless explicitly enabled. The current scope validator validates the initial target; it does not independently validate every discovered subdomain or resolved IP. Keep subdomain enumeration disabled unless you have separately established authorization for the relevant targets.
+
+## Testing
+
+Run the test suite:
+
+```bash
+python -m pytest -v
+```
+
+Compile-check the application:
+
+```bash
+python -m py_compile main.py
+```
+
+The current test suite contains 16 tests covering scope validation, including domain matching, IP validation, unsupported schemes, malformed URLs, and subdomain handling.
+
+These tests do not constitute complete testing of every scanner module.
+
+## Reports and Logs
+
+After a successful scan, VulScan generates:
+
+- PDF assessment report
+- JSON assessment report
+- Scan log
+
+Generated files are stored in:
+
+```text
+reports/
+logs/
+```
+
+## Project Structure
+
+```text
+VulScan/
+├── main.py
+├── config.py
+├── requirements.txt
+├── README.md
+├── security/
+│   └── scope_validator.py
+├── tests/
+│   └── test_scope_validator.py
+├── modules/
+│   ├── __init__.py
+│   ├── url_ip.py
+│   ├── port_scanner.py
+│   ├── subdomain_scanner.py
+│   ├── ssl_checker.py
+│   ├── sql_injection_checker.py
+│   ├── xss_checker.py
+│   └── risk_analyzer.py
+├── utils/
+│   ├── __init__.py
+│   ├── logger.py
+│   └── report_generator.py
+├── reports/
+└── logs/
+```
+
+The root-level Python modules contain the scanner implementations; the `modules/` directory provides compatibility imports.
+
+## Technology Stack
+
+- Python
+- Requests
+- urllib3
+- dnspython
+- python-whois
+- Colorama
+- ReportLab
+- Pytest
+- Socket and SSL standard libraries
+
+## Limitations
+
+- SQL injection and XSS checks use basic payload-based techniques.
+- Results require manual verification; false positives and false negatives are possible.
+- The tool does not replace Burp Suite, professional penetration testing, or manual vulnerability analysis.
+- Scope validation currently checks the initial target, not every DNS resolution, redirect destination, or discovered subdomain.
+- Automatic HTTP redirect following is disabled.
+- TLS certificate verification uses Requests' default behavior.
+
+## Legal Disclaimer
+
+VulScan is intended for educational purposes and authorized security assessments only.
+
+Only scan systems you own or have explicit permission to test. You are responsible for obtaining authorization and complying with applicable laws and program rules.
+
+## Original Project Attribution
+
+This project is based on and extends:
+
+[VulnerabilityScanner — Majid Ansari](https://github.com/majidansari2/VulnerabilityScanner)
+
+Original project attribution and applicable license terms should be preserved.
+
 ---
 
-## 🛠️ Troubleshooting
+**Maintained by Sagar Kumar**  
+GitHub: https://github.com/sagarkumar05
 
-| Error | Fix |
-|-------|-----|
-| `ModuleNotFoundError: colorama` | `pip install -r requirements.txt` |
-| `python not recognized` | Reinstall Python, check "Add to PATH" |
-| `Connection refused` | Target may be offline / firewall blocking |
-| `SSL: CERTIFICATE_VERIFY_FAILED` | Normal for self-signed certs — scanner handles it |
-
----
-
-## 📚 Tech Stack
-- **Python 3.8+**
-- `requests` — HTTP scanning
-- `dnspython` — DNS queries
-- `colorama` — colored terminal output
-- `python-whois` — WHOIS lookups
-- `reportlab` — PDF report generation
-- `socket` — TCP port scanning (stdlib)
-- `ssl` — SSL/TLS inspection (stdlib)
-- `concurrent.futures` — multi-threaded scanning (stdlib)
-
----
-
-*For educational and authorized security testing use only.*

@@ -2,7 +2,6 @@ import logging
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 
 import requests
-import urllib3
 
 from config import (
     SQL_PAYLOADS, SQL_ERROR_SIGNATURES,
@@ -10,7 +9,6 @@ from config import (
 )
 
 # SSL warnings suppress
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 def check_sql_injection(url: str, logger: logging.Logger) -> dict:
@@ -34,7 +32,7 @@ def check_sql_injection(url: str, logger: logging.Logger) -> dict:
                 r = requests.get(
                     test_url + payload,
                     headers=HEADERS, timeout=REQUEST_TIMEOUT,
-                    verify=False, allow_redirects=True
+                    allow_redirects=False
                 )
                 if _check_sql_errors(r.text):
                     result["vulnerable"] = True
@@ -66,8 +64,7 @@ def check_sql_injection(url: str, logger: logging.Logger) -> dict:
                     test_url,
                     headers=HEADERS,
                     timeout=REQUEST_TIMEOUT,
-                    verify=False,
-                    allow_redirects=True,
+                    allow_redirects=False,
                 )
                 response_text = response.text.lower()
 

@@ -5,3 +5,13 @@ __pycache__/
 reports/
 logs/
 .env
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+
+# Generated output
+logs/*
+reports/*

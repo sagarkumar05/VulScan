@@ -49,8 +49,7 @@ def get_url_ip_info(target: str, logger: logging.Logger) -> dict:
             resp = requests.head(
                 target, headers=HEADERS,
                 timeout=REQUEST_TIMEOUT,
-                allow_redirects=True,
-                verify=False           # SSL errors ignore karo (self-signed certs ke liye)
+                allow_redirects=False,
             )
             result["status_code"] = resp.status_code
             result["server"] = resp.headers.get("Server", "N/A")
